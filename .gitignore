@@ -31,7 +31,3 @@ coverage.xml
 # Miscellaneous
 *.py~
 *.swp
-
-# Data and reports
-data/
-reports/
