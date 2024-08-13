@@ -17,9 +17,4 @@ This Python script compares and analyzes charity donation data from two CSV file
 - **README.md**: Provides a description of the project and information about the repository.
 
 ## Running the Tests
-To run the tests, navigate to the `tests/` directory and run the following command:
-
-```bash
-python -m unittest test_script_main.py
-"# CharityProject" 
-"# dsfsdf" 
+To run the tests, navigate to the `tests/` directory and run the following command: python -m unittest test_script_main.py
