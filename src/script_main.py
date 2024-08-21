@@ -25,48 +25,48 @@ class SetUpCSV:
         for row in self.data:
             # Data must be read as floats to perform calculations.
             try:
-                row['Donation Amount'] = float(row['Donation Amount'])
+                row['Purchase Amount'] = float(row['Purchase Amount'])
             except ValueError:
-                print(f"Invalid donation amount '{row['Donation Amount']}' found. Setting it to 0.0.")
-                row['Donation Amount'] = 0.0
+                print(f"Invalid purchase amount '{row['Purchase Amount']}' found. Setting it to 0.0.")
+                row['Purchase Amount'] = 0.0
 
 
-class DonorAnalysis:
+class PurchaseAnalysis:
     def __init__(self, historical_data, current_data):
         self.historical_data = historical_data
         self.current_data = current_data
 
-    def compare_donors(self):
+    def compare_buyers(self):
         # Sets storing old and current ID's.
-        historical_donors = {row['ID'] for row in self.historical_data}
-        current_donors = {row['ID'] for row in self.current_data}
+        historical_buyers = {row['ID'] for row in self.historical_data}
+        current_buyers = {row['ID'] for row in self.current_data}
 
-        new_donors = current_donors - historical_donors  # Leaves donors that have not donated before.
-        stopped_donors = historical_donors - current_donors  # Leaves donors that have not donated again.
+        new_buyers = current_buyers - historical_buyers  # Leaves buyers that have not bought before.
+        stopped_buyers = historical_buyers - current_buyers  # Leaves buyers that have not bought again.
 
-        return new_donors, stopped_donors
+        return new_buyers, stopped_buyers
 
-    def compare_donations(self):
+    def compare_purchases(self):
         # Dictionaries storing ID's as keys and the rest of the row a value.
         # Ex. {1:{*enter rest of row as dictionary*}}
         historical_dict = {row['ID']: row for row in self.historical_data}
         current_dict = {row['ID']: row for row in self.current_data}
 
-        increased_donations = []
-        decreased_donations = []
+        increased_purchases = []
+        decreased_purchases = []
 
-        for donor_id in current_dict:
-            if donor_id in historical_dict:
-                historical_amount = historical_dict[donor_id]['Donation Amount']
-                current_amount = current_dict[donor_id]['Donation Amount']
+        for customer_id in current_dict:
+            if customer_id in historical_dict:
+                historical_amount = historical_dict[customer_id]['Purchase Amount']
+                current_amount = current_dict[customer_id]['Purchase Amount']
                 if current_amount > historical_amount:
-                    # Adding tuple containing donor_id, historical_amount, current_amount to increased list.
-                    increased_donations.append((donor_id, historical_amount, current_amount))
+                    # Adding tuple containing customer_id, historical_amount, current_amount to increased list.
+                    increased_purchases.append((customer_id, historical_amount, current_amount))
                 elif current_amount < historical_amount:
-                    # Adding tuple containing donor_id, historical_amount, current_amount to decreased list.
-                    decreased_donations.append((donor_id, historical_amount, current_amount))
+                    # Adding tuple containing customer_id, historical_amount, current_amount to decreased list.
+                    decreased_purchases.append((customer_id, historical_amount, current_amount))
 
-        return increased_donations, decreased_donations
+        return increased_purchases, decreased_purchases
 
 
 class AnalyzeTrends:
@@ -75,45 +75,45 @@ class AnalyzeTrends:
         self.data = data
 
     def analyze_trends(self):
-        monthly_donations = defaultdict(float)
+        monthly_purchases = defaultdict(float)
         for row in self.data:
-            date = row['Donation Date']
+            date = row['Purchase Date']
             month = date[:7]  # Extract YYYY-MM from YYYY-MM-DD
-            # Keeping track of donation amount for stated month in monthly_donations dictionary.
-            monthly_donations[month] += row['Donation Amount']
+            # Keeping track of purchase amount for stated month in monthly_purchases dictionary.
+            monthly_purchases[month] += row['Purchase Amount']
         # Sorted dictionary by YYYY-MM (earliest to latest).
-        sorted_trends = sorted(monthly_donations.items())
+        sorted_trends = sorted(monthly_purchases.items())
         return sorted_trends
 
 
 class CreateReport:
-    def __init__(self, new_donors, stopped_donors, increased_donations, decreased_donations, trends):
-        self.new_donors = new_donors
-        self.stopped_donors = stopped_donors
-        self.increased_donations = increased_donations
-        self.decreased_donations = decreased_donations
+    def __init__(self, new_buyers, stopped_buyers, increased_purchases, decreased_purchases, trends):
+        self.new_buyers = new_buyers
+        self.stopped_buyers = stopped_buyers
+        self.increased_purchases = increased_purchases
+        self.decreased_purchases = decreased_purchases
         self.trends = trends
 
     def create_report(self):
-        print("New Donors:")
-        for donor in self.new_donors:
-            print(donor)
+        print("New Buyers:")
+        for buyer in self.new_buyers:
+            print(buyer)
 
-        print("\nStopped Donors:")
-        for donor in self.stopped_donors:
-            print(donor)
+        print("\nStopped Buyers:")
+        for buyer in self.stopped_buyers:
+            print(buyer)
 
-        print("\nIncreased Donations:")
-        for donor_id, old_amount, new_amount in self.increased_donations:
-            print(f"Donor ID: {donor_id}, Old Amount: {old_amount}, New Amount: {new_amount}")
+        print("\nIncreased Purchases:")
+        for customer_id, old_amount, new_amount in self.increased_purchases:
+            print(f"Customer ID: {customer_id}, Old Amount: {old_amount}, New Amount: {new_amount}")
 
-        print("\nDecreased Donations:")
-        for donor_id, old_amount, new_amount in self.decreased_donations:
-            print(f"Donor ID: {donor_id}, Old Amount: {old_amount}, New Amount: {new_amount}")
+        print("\nDecreased Purchases:")
+        for customer_id, old_amount, new_amount in self.decreased_purchases:
+            print(f"Customer ID: {customer_id}, Old Amount: {old_amount}, New Amount: {new_amount}")
 
-        print("\nMonthly Donation Trends:")
+        print("\nMonthly Purchasing Trends:")
         for month, total in self.trends:
-            print(f"Month: {month}, Total Donations: {total}")
+            print(f"Month: {month}, Total Purchases: {total}")
 
 
 def main():
@@ -131,16 +131,16 @@ def main():
         instance_current.read_csv()
         instance_current.convert_data()
 
-        # First instance of DonorAnalysis class, comparing donors and donations of historical and current donors.
-        analysis = DonorAnalysis(instance_historical.data, instance_current.data)
-        new_donors, stopped_donors = analysis.compare_donors()
-        increased_donations, decreased_donations = analysis.compare_donations()
+        # First instance of PurchaseAnalysis class, comparing buyers and purchases of historical and current buyers.
+        analysis = PurchaseAnalysis(instance_historical.data, instance_current.data)
+        new_buyers, stopped_buyers = analysis.compare_buyers()
+        increased_purchases, decreased_purchases = analysis.compare_purchases()
 
-        # First instance of AnalyzeTrends class, showing total donations per month (adding historical and current data).
+        # First instance of AnalyzeTrends class, showing total purchases per month (adding historical and current data).
         trends = AnalyzeTrends(instance_historical.data + instance_current.data).analyze_trends()
 
         # First instance of CreateReport class, generating report based on previously determined variables.
-        instance_report = CreateReport(new_donors, stopped_donors, increased_donations, decreased_donations, trends)
+        instance_report = CreateReport(new_buyers, stopped_buyers, increased_purchases, decreased_purchases, trends)
         instance_report.create_report()
 
     except FileNotFoundError as e:
