@@ -1,4 +1,4 @@
-# Charity Donation Analysis Tool
+# Buyer Trends Analysis Tool
 
 ## Description
 This Python script compares and analyzes company purchasing data from two CSV files: historical and current data. It reads and processes the CSV files, identifies new and stopped buyers, compares purchasing amounts, and analyzes monthly purchasing trends. The script then generates a comprehensive report based on these analyses. This tool is ideal for organizations looking to understand purchasing patterns and buyer behavior over time.
