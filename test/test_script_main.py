@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, mock_open
 from io import StringIO
-from GitHub.CharityProject.src.script_main import SetUpCSV, PurchaseAnalysis, AnalyzeTrends, CreateReport
+from GitHub.BuyerTrends.src.script_main import SetUpCSV, PurchaseAnalysis, AnalyzeTrends, CreateReport
 
 
 class TestSetUpCSV(unittest.TestCase):
